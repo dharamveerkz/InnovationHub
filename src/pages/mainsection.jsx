@@ -1,15 +1,41 @@
-// 🔹 IMPORT YOUR IDEAS HERE — they auto-appear with stars
-import HealthScanAI from '../ideas/HealthScan-AI';
+// src/pages/mainsection.jsx
+import Head from 'next/head';
+
+// 🔹 IMPORT YOUR IDEAS HERE — just add new lines as you create them
+import HealthScanAI from '../ideas/HealthScanAI';
 import ArtBridge from '../ideas/ArtBridge';
+// import DropRoute from '../ideas/DropRoute';        // ← Example: uncomment when ready
+// import NoteStack from '../ideas/NoteStack';        // ← Example: add new ideas here
+// import PriceLens from '../ideas/PriceLens';
+// import FlowMail from '../ideas/FlowMail';
+
+// 🔹 CONFIG: Update these when you add/remove ideas
+const PROJECT_COUNT = 2; // ← Change this number when you add new ideas
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge']; // ← Add new names for ticker
 
 export default function MainSection() {
   return (
     <>
-      {/* HERO */}
+      <Head>
+        <title>Dharamveer — Startup Lab</title>
+        <meta name="description" content="Every idea gets a prototype. Building in public." />
+        <meta property="og:title" content="Dharamveer — Startup Lab" />
+        <meta property="og:description" content="Working prototypes for every startup idea" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {/* ── HERO STRIP ── */}
       <section className="hero-strip">
         <div className="fade-in delay-1">
           <div className="hero-tag">Startup Lab</div>
-          <h1>Every <em>idea</em><br />gets a<br />prototype.</h1>
+          <h1>
+            Every <em>idea</em>
+            <br />
+            gets a
+            <br />
+            prototype.
+          </h1>
         </div>
         <div className="fade-in delay-2">
           <p className="hero-desc">
@@ -18,11 +44,10 @@ export default function MainSection() {
           </p>
           <div className="hero-stat">
             <div>
-              <div className="stat-num">02</div>
+              <div className="stat-num">{String(PROJECT_COUNT).padStart(2, '0')}</div>
               <div className="stat-label">Prototypes</div>
             </div>
-            <div>
-              <div className="stat-num">∞</div>
+            <div>              <div className="stat-num">∞</div>
               <div className="stat-label">Ideas</div>
             </div>
             <div>
@@ -33,37 +58,44 @@ export default function MainSection() {
         </div>
       </section>
 
-      {/* TICKER */}
+      {/* ── ANIMATED TICKER ── */}
       <div className="ticker">
         <div className="ticker-track">
-          <span className="ticker-item">HealthScan AI <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">ArtBridge <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">DropRoute <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">NoteStack <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">PriceLens <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">FlowMail <span className="ticker-dot">◆</span></span>
-          {/* duplicated for seamless loop */}
-          <span className="ticker-item">HealthScan AI <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">ArtBridge <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">DropRoute <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">NoteStack <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">PriceLens <span className="ticker-dot">◆</span></span>
-          <span className="ticker-item">FlowMail <span className="ticker-dot">◆</span></span>
+          {/* First set */}
+          {PROTOTYPE_NAMES.map((name, i) => (
+            <span className="ticker-item" key={`a-${i}`}>
+              {name} <span className="ticker-dot">◆</span>
+            </span>
+          ))}
+          {/* Duplicated set for seamless infinite loop */}
+          {PROTOTYPE_NAMES.map((name, i) => (
+            <span className="ticker-item" key={`b-${i}`}>
+              {name} <span className="ticker-dot">◆</span>
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* PROJECTS GRID */}
+      {/* ── PROJECTS GRID ── */}
       <main id="projects">
         <div className="section-header">
           <span className="section-title">// Prototypes</span>
-          <span className="section-count">02 Projects</span>
+          <span className="section-count">
+            {String(PROJECT_COUNT).padStart(2, '0')} Projects
+          </span>
         </div>
+
         <div className="projects">
+          {/* 🔹 RENDER YOUR IDEAS HERE — order = display order */}
           <HealthScanAI />
           <ArtBridge />
-          {/* 🔹 ADD NEW IDEAS HERE — just import & drop in */}
+          
+          {/* 🔹 ADD NEW IDEAS BELOW — just import at top + add component here */}
+          {/* <DropRoute /> */}
+          {/* <NoteStack /> */}
+          {/* <PriceLens /> */}
+          {/* <FlowMail /> */}
         </div>
-      </main>
-    </>
+      </main>    </>
   );
 }
