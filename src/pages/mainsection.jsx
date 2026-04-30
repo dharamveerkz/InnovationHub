@@ -4,14 +4,12 @@ import Head from 'next/head';
 // 🔹 IMPORT YOUR IDEAS HERE — just add new lines as you create them
 import HealthScanAI from '../ideas/HealthScanAI';
 import ArtBridge from '../ideas/ArtBridge';
-// import DropRoute from '../ideas/DropRoute';        // ← Example: uncomment when ready
-// import NoteStack from '../ideas/NoteStack';        // ← Example: add new ideas here
-// import PriceLens from '../ideas/PriceLens';
-// import FlowMail from '../ideas/FlowMail';
+import SchoolERP from '../ideas/SchoolERP';
 
-// 🔹 CONFIG: Update these when you add/remove ideas
-const PROJECT_COUNT = 2; // ← Change this number when you add new ideas
-const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge']; // ← Add new names for ticker
+
+
+const PROJECT_COUNT = 3; 
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP'];
 
 export default function MainSection() {
   return (
