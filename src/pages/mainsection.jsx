@@ -84,15 +84,12 @@ export default function MainSection() {
         </div>
 
         <div className="projects">
-          {/* 🔹 RENDER YOUR IDEAS HERE — order = display order */}
           <HealthScanAI />
           <ArtBridge />
+          <SchoolERP />
           
-          {/* 🔹 ADD NEW IDEAS BELOW — just import at top + add component here */}
-          {/* <DropRoute /> */}
-          {/* <NoteStack /> */}
-          {/* <PriceLens /> */}
-          {/* <FlowMail /> */}
+
+
         </div>
       </main>    </>
   );
