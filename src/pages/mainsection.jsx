@@ -9,8 +9,8 @@ import KalaaCart from '../ideas/KalaaCart';
 
 
 
-const PROJECT_COUNT = 3; 
-const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP'];
+const PROJECT_COUNT = 4; 
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart'];
 
 export default function MainSection() {
   return (
