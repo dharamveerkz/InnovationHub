@@ -6,11 +6,12 @@ import HealthScanAI from '../ideas/HealthScanAI';
 import ArtBridge from '../ideas/ArtBridge';
 import SchoolERP from '../ideas/SchoolERP';
 import KalaaCart from '../ideas/KalaaCart';
+import KalaaCart from '../ideas/Crafix';
 
 
 
-const PROJECT_COUNT = 4; 
-const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart'];
+const PROJECT_COUNT = 5; 
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart', 'Crafix'];
 
 export default function MainSection() {
   return (
@@ -89,6 +90,7 @@ export default function MainSection() {
           <ArtBridge />
           <SchoolERP />
           <KalaaCart />
+          <Crafix />
           
 
 
