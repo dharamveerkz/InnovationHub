@@ -5,7 +5,7 @@ import HealthScanAI from '../ideas/HealthScanAI';
 import ArtBridge from '../ideas/ArtBridge';
 import SchoolERP from '../ideas/SchoolERP';
 import KalaaCart from '../ideas/KalaaCart';
-import KalaaCart from '../ideas/Crafix';
+import Crafix from '../ideas/Crafix';
 
 
 
