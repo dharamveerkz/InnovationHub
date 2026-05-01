@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 
 /* ============================================================
-   THREAD CRAFT — Full Platform
+   crafix — Full Platform
    Flow: Landing → Product Select → Editor → Review → Checkout → Success → Gallery
    ============================================================ */
 
