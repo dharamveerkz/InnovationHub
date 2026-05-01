@@ -23,7 +23,7 @@ const categories = [
 
 const products = [
   // Madhubani
-  { id: 1, name: "Madhubani Fish Painting", category: "madhubani", price: 1299, badge: "🐟 Madhubani", artisan: "Sunita Devi", village: "Ranti", desc: "Hand-painted on handmade paper with natural pigments. Twin fish motif — symbol of prosperity.", img: null },
+  { id: 1, name: "Madhubani Fish Painting", category: "madhubani", price: 1299, badge: "🐟 Madhubani", artisan: "Sunita Devi", village: "Ranti", desc: "Hand-painted on handmade paper with natural pigments. Twin fish motif — symbol of prosperity.", img: /public/images/painting1.jpg },
   { id: 2, name: "Tree of Life Canvas", category: "madhubani", price: 2499, badge: "🐟 Madhubani", artisan: "Kamla Devi", village: "Jitwarpur", desc: "Large canvas depicting the sacred tree, painted with cow dung base and earth colours.", img: null },
   { id: 3, name: "Ganesha Silk Scroll", category: "madhubani", price: 3199, badge: "✨ Limited Drop", artisan: "Mira Devi", village: "Madhubani", desc: "Silk scroll with intricate Ganesha in Bharni style — bold fills, precise outlines.", img: null },
   { id: 4, name: "Bridal Procession Panel", category: "madhubani", price: 4500, badge: "✨ Limited Drop", artisan: "Sita Devi", village: "Ranti", desc: "Depicts a traditional Bihar bridal procession. Hand-painted, 24×18 inches.", img: null },
