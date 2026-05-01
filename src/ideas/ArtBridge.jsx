@@ -6,7 +6,7 @@ export default function ArtBridge() {
       id="002"
       name="Art"
       highlight="Bridge"
-      description="A marketplace connecting emerging artists directly to buyers. No gallery cuts — just art, story, and fair pricing."
+      description="ArtBridge makes it easy to turn any blank wall into a work of art by connecting you with skilled local artists. Whether you're a homeowner or a business, you can share your vision, compare clear artist bids, and track every step of the project in real time."
       tags={['Marketplace', 'Creators', 'Web3']}
       starred={true}
       href="/prototypes/artbridge"
