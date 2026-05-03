@@ -1,3 +1,4 @@
+import { jsPDF } from "jspdf";
 import { useState, useRef, useCallback } from "react";
 
 const TOOLS = [
