@@ -194,27 +194,36 @@ function useAIAnalyze() {
         r.onerror = rej;
         r.readAsDataURL(f);
       });
+    
     const base64 = await toBase64(file);
     const mediaType = file.type;
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+
+    // 🔁 OpenAI API Call (replaces Anthropic)
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+      },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "user",
             content: [
-              { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
               { type: "text", text: "Analyze this image thoroughly. Describe: 1) What you see, 2) Colors & composition, 3) Quality assessment, 4) Suggested improvements or use cases. Be concise but insightful." },
-            ],
-          },
+              { type: "image_url", image_url: { url: `data:${mediaType};base64,${base64}` } }
+            ]
+          }
         ],
-      }),
+        max_tokens: 1000
+      })
     });
+
     const data = await response.json();
-    return data.content?.[0]?.text || "No analysis available.";
+    
+    // 🔁 OpenAI response structure (different from Anthropic)
+    return data.choices?.[0]?.message?.content || "No analysis available.";
   }, []);
 }
 
