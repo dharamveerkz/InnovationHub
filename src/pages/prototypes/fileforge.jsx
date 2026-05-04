@@ -88,26 +88,26 @@ async function aiAnalyze(file) {
     r.onerror = rej;
     r.readAsDataURL(file);
   });
-  
-  // Using OpenAI (update to use NEXT_PUBLIC_OPENAI_API_KEY)
+
   const resp = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
-    headers: { 
+    headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
     },
-    body: JSON.stringify({      model: "gpt-4o-mini",
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
       max_tokens: 1000,
       messages: [{
         role: "user",
         content: [
-          { type: "image_url", image_url: { url: `${file.type};base64,${b64}` } },
+          { type: "image_url", image_url: { url: `data:${file.type};base64,${b64}` } },
           { type: "text", text: "Analyze this image concisely: describe what you see, note colors and composition, assess quality, and give 2–3 practical suggestions." }
         ]
       }]
     })
   });
-  
+
   const d = await resp.json();
   return d.choices?.[0]?.message?.content || "No analysis returned.";
 }
