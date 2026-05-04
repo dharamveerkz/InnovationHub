@@ -6,11 +6,12 @@ import ArtBridge from '../ideas/ArtBridge';
 import SchoolERP from '../ideas/SchoolERP';
 import KalaaCart from '../ideas/KalaaCart';
 import Crafix from '../ideas/Crafix';
+import FileForge from '../ideas/FileForge';
 
 
 
-const PROJECT_COUNT = 5; 
-const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart', 'Crafix'];
+const PROJECT_COUNT = 6; 
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart', 'Crafix', 'FileForge'];
 
 export default function MainSection() {
   return (
@@ -90,6 +91,7 @@ export default function MainSection() {
           <SchoolERP />
           <KalaaCart />
           <Crafix />
+          <FileForge />
           
 
 
