@@ -11,7 +11,7 @@ export default function ProjectCard({
     <a className="project-card" href={href}>
       <div className="card-inner">
         <div className="card-top">
-          <span className="card-num">{id}</span>
+    
           <span className="card-arrow">↗</span>
         </div>
         <div className="card-name">{name}<span className="highlight">{highlight}</span></div>
