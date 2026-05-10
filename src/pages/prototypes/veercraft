@@ -1,0 +1,479 @@
+import { useState, useEffect, useRef } from "react";
+
+/* ─── DATA ─────────────────────────────────────────────── */
+const categories = [
+  { id:1, icon:"🪪", title:"Business & Office",      color:"#FF6B00", bg:"#FFF3EB", items:["Visiting Cards","Letterheads","Envelopes","Bill Books","ID Cards","Stamps","Notepads"] },
+  { id:2, icon:"👕", title:"Apparel",                color:"#E91E8C", bg:"#FFF0F7", items:["T-Shirts","Hoodies","Sweatshirts","Jackets","Caps","Aprons","Kids Wear"] },
+  { id:3, icon:"🎁", title:"Gifts & Personalised",   color:"#7C3AED", bg:"#F5F0FF", items:["Photo Frames","LED Name Lamps","Keychains","Cushion Covers","Wall Clocks","Name Plates"] },
+  { id:4, icon:"🏠", title:"Home & Wall Decor",      color:"#059669", bg:"#EDFAF5", items:["Posters","Canvas Prints","Wall Stickers","Wall Frames","Photo Tiles"] },
+  { id:5, icon:"📚", title:"Stationery & Paper",     color:"#0284C7", bg:"#EFF8FF", items:["Diaries","Planners","Calendars","Greeting Cards","Invitation Cards","Stickers","Labels"] },
+  { id:6, icon:"🎉", title:"Event & Festival",       color:"#DC2626", bg:"#FFF5F5", items:["Wedding Cards","Birthday Banners","Flex Banners","Standees","Backdrops","Festival Posters"] },
+  { id:7, icon:"🚗", title:"Promotional & Branding", color:"#D97706", bg:"#FFFBEB", items:["Banners & Hoardings","Flex Boards","Sunboards","Brochures","Flyers","Pamphlets","Bulk Stickers"] },
+];
+
+const stats = [
+  { value:"10,000+", label:"Orders Delivered", icon:"📦" },
+  { value:"500+",    label:"Happy Clients",    icon:"😊" },
+  { value:"7+",      label:"Categories",       icon:"🎨" },
+  { value:"48hr",    label:"Fast Turnaround",  icon:"⚡" },
+];
+
+const features = [
+  { icon:"⚡", title:"48-Hour Delivery",    desc:"Rush jobs handled with the same care as standard orders.", color:"#FF6B00" },
+  { icon:"🎨", title:"Free Design Support", desc:"Share your idea — our team creates the design for you.",  color:"#E91E8C" },
+  { icon:"✅", title:"Quality Guaranteed",  desc:"Premium materials, vibrant inks, flawless finishing.",    color:"#7C3AED" },
+  { icon:"💬", title:"WhatsApp Ordering",   desc:"Just message us — we handle everything from there.",     color:"#059669" },
+];
+
+const testimonials = [
+  { name:"Ravi Sharma",  role:"Business Owner",  text:"VeerCraft printed our office stationery perfectly. Fast delivery, premium quality!", avatar:"RS", color:"#FF6B00" },
+  { name:"Priya Nair",   role:"Event Planner",   text:"Ordered wedding cards and banners — both were stunning. Will always come back!",    avatar:"PN", color:"#E91E8C" },
+  { name:"Arjun Mehta",  role:"Startup Founder", text:"Best visiting cards I've ever had. The matte finish is absolutely top-notch.",      avatar:"AM", color:"#7C3AED" },
+];
+
+const marqueeItems = ["Visiting Cards","Custom T-Shirts","Wedding Cards","Banners","Flex Boards","Diaries","Keychains","LED Lamps","Canvas Prints","Standees","Brochures","ID Cards"];
+
+/* ─── HOOK ──────────────────────────────────────────────── */
+function useInView(threshold = 0.1) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
+/* ─── CATEGORY CARD ─────────────────────────────────────── */
+function CatCard({ cat, index }) {
+  const [ref, visible] = useInView();
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(32px)",
+        transition: `opacity .55s ease ${index*0.07}s, transform .55s ease ${index*0.07}s`,
+        background: hovered ? cat.color : "#fff",
+        border: `2.5px solid ${cat.color}`,
+        borderRadius: "16px",
+        padding: "22px 18px",
+        cursor: "pointer",
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: hovered ? `0 16px 40px ${cat.color}55` : "0 2px 12px rgba(0,0,0,0.06)",
+        transition: `opacity .55s ease ${index*0.07}s, transform .55s ease ${index*0.07}s, background .3s, box-shadow .3s`,
+      }}>
+      <div style={{ position:"absolute", top:"-16px", right:"-16px", width:"64px", height:"64px", borderRadius:"50%", background: hovered ? "rgba(255,255,255,0.15)" : `${cat.color}22`, transition:"all .4s" }} />
+      <div style={{ fontSize:"1.8rem", marginBottom:"8px" }}>{cat.icon}</div>
+      <h3 style={{ fontFamily:"'Nunito',sans-serif", fontWeight:800, fontSize:"1rem", color: hovered ? "#fff" : cat.color, marginBottom:"10px", transition:"color .3s" }}>{cat.title}</h3>
+      <ul style={{ listStyle:"none", padding:0, margin:0 }}>
+        {cat.items.slice(0,4).map((item,i) => (
+          <li key={i} style={{ fontSize:"0.8rem", color: hovered ? "rgba(255,255,255,0.9)" : "#555", padding:"2px 0", display:"flex", alignItems:"center", gap:"6px", transition:"color .3s", fontFamily:"'Nunito',sans-serif" }}>
+            <span style={{ width:"4px", height:"4px", borderRadius:"50%", background: hovered ? "#fff" : cat.color, flexShrink:0 }} />
+            {item}
+          </li>
+        ))}
+        {cat.items.length > 4 && <li style={{ fontSize:"0.74rem", color: hovered ? "rgba(255,255,255,0.6)" : "#aaa", marginTop:"3px" }}>+{cat.items.length-4} more</li>}
+      </ul>
+    </div>
+  );
+}
+
+/* ─── MAIN ──────────────────────────────────────────────── */
+export default function VeerCraft() {
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [activeT,   setActiveT]   = useState(0);
+  const [formData,  setFormData]  = useState({ name:"", phone:"", service:"", message:"" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const [heroRef,  heroVisible]  = useInView(0.05);
+  const [statsRef, statsVisible] = useInView();
+  const [whyRef,   whyVisible]   = useInView();
+
+  useEffect(() => {
+    const t = setInterval(() => setActiveT(a => (a+1) % testimonials.length), 4000);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div style={{ fontFamily:"'Nunito',sans-serif", background:"#F8F9FF", color:"#1A1A2E", overflowX:"hidden", maxWidth:"100vw" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap');
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+        html, body { overflow-x:hidden; scroll-behavior:smooth; }
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-thumb { background:linear-gradient(#FF6B00,#E91E8C); border-radius:4px; }
+        a { text-decoration:none; color:inherit; }
+        input,textarea,select { font-family:'Nunito',sans-serif; outline:none; }
+        input:focus,textarea:focus,select:focus { border-color:#FF6B00 !important; box-shadow:0 0 0 3px #FF6B0022 !important; }
+
+        @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes marquee  { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes gradShift{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes pulseDot { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.4);opacity:1} }
+
+        .marquee-outer { overflow:hidden; width:100%; }
+        .marquee-track { display:flex; width:max-content; animation:marquee 28s linear infinite; }
+        .marquee-track:hover { animation-play-state:paused; }
+
+        .nav-link { font-size:.88rem; font-weight:800; color:#1A1A2E; letter-spacing:.04em; text-transform:uppercase; transition:color .2s; }
+        .nav-link:hover { color:#FF6B00; }
+
+        .btn-grad  { display:inline-block; background:linear-gradient(135deg,#FF6B00,#E91E8C); color:#fff; border:none; padding:14px 30px; font-family:'Nunito',sans-serif; font-size:.95rem; font-weight:800; cursor:pointer; border-radius:50px; transition:transform .25s,box-shadow .25s; box-shadow:0 6px 20px #FF6B0040; }
+        .btn-grad:hover  { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 30px #FF6B0060; }
+        .btn-white { display:inline-block; background:#fff; color:#FF6B00; border:2.5px solid #FF6B00; padding:12px 26px; font-family:'Nunito',sans-serif; font-size:.92rem; font-weight:800; cursor:pointer; border-radius:50px; transition:all .25s; }
+        .btn-white:hover { background:#FF6B00; color:#fff; }
+
+        .pill { display:inline-block; background:linear-gradient(135deg,#FF6B00,#E91E8C); color:#fff; font-size:.73rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; padding:6px 18px; border-radius:50px; margin-bottom:14px; }
+
+        /* ── RESPONSIVE ── */
+        .hero-wrap   { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+        .stats-wrap  { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+        .why-wrap    { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+        .footer-wrap { display:grid; grid-template-columns:2fr 1fr 1fr; gap:40px; }
+        .cat-grid    { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:14px; }
+
+        .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:8px; background:none; border:none; }
+        .hamburger span { display:block; width:24px; height:2.5px; border-radius:2px; background:#1A1A2E; transition:all .3s; }
+        .desktop-links { display:flex; gap:28px; align-items:center; }
+        .mobile-menu   { display:none; }
+
+        @media (max-width:900px) {
+          .hero-wrap  { grid-template-columns:1fr; }
+          .hero-visual { display:none !important; }
+          .why-wrap   { grid-template-columns:1fr; }
+        }
+        @media (max-width:700px) {
+          .stats-wrap  { grid-template-columns:repeat(2,1fr); }
+          .footer-wrap { grid-template-columns:1fr; }
+          .desktop-links { display:none; }
+          .hamburger     { display:flex; }
+          .mobile-menu.open { display:flex; }
+          .cat-grid { grid-template-columns:repeat(2,1fr); }
+        }
+        @media (max-width:400px) {
+          .cat-grid { grid-template-columns:1fr; }
+        }
+      `}</style>
+
+      {/* ═══ NAV ═══ */}
+      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:300, background:"rgba(248,249,255,.97)", backdropFilter:"blur(14px)", borderBottom:"2px solid #FF6B0025", height:"64px", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 20px" }}>
+        {/* Logo */}
+        <div style={{ display:"flex", alignItems:"center", gap:"9px", flexShrink:0 }}>
+          <div style={{ width:"36px", height:"36px", borderRadius:"11px", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 14px #FF6B0055", flexShrink:0 }}>
+            <span style={{ color:"#fff", fontWeight:900, fontSize:"1.1rem" }}>V</span>
+          </div>
+          <span style={{ fontWeight:900, fontSize:"1.4rem", letterSpacing:"-.02em", whiteSpace:"nowrap" }}>
+            Veer<span style={{ background:"linear-gradient(90deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Craft</span>
+          </span>
+        </div>
+
+        {/* Desktop */}
+        <div className="desktop-links">
+          {["Services","About","Contact"].map(l => <a key={l} href={`#${l.toLowerCase()}`} className="nav-link">{l}</a>)}
+          <a href="#contact"><button className="btn-grad" style={{ padding:"10px 22px", fontSize:".85rem" }}>Get Quote</button></a>
+        </div>
+
+        {/* Hamburger */}
+        <button className="hamburger" onClick={() => setMenuOpen(o=>!o)} aria-label="menu">
+          <span style={{ transform: menuOpen?"rotate(45deg) translate(5px,5px)":"none" }} />
+          <span style={{ opacity: menuOpen?0:1 }} />
+          <span style={{ transform: menuOpen?"rotate(-45deg) translate(5px,-5px)":"none" }} />
+        </button>
+      </nav>
+
+      {/* Mobile dropdown */}
+      <div className={`mobile-menu${menuOpen?" open":""}`} style={{ position:"fixed", top:"64px", left:0, right:0, background:"#fff", flexDirection:"column", padding:"20px", gap:"16px", boxShadow:"0 8px 30px rgba(0,0,0,0.12)", zIndex:299, borderBottom:"3px solid #FF6B00" }}>
+        {["Services","About","Contact"].map(l => (
+          <a key={l} href={`#${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} style={{ fontWeight:800, fontSize:"1rem", color:"#1A1A2E", textTransform:"uppercase", letterSpacing:".04em" }}>{l}</a>
+        ))}
+        <a href="#contact" onClick={() => setMenuOpen(false)}><button className="btn-grad" style={{ width:"100%", textAlign:"center" }}>Get Free Quote</button></a>
+      </div>
+
+      {/* ═══ HERO ═══ */}
+      <section style={{ minHeight:"100vh", paddingTop:"64px", background:"linear-gradient(135deg,#FFF3EB 0%,#FFF0F7 45%,#F5F0FF 100%)", display:"flex", alignItems:"center", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", top:"-100px", right:"-100px", width:"400px", height:"400px", borderRadius:"50%", background:"radial-gradient(circle,#FF6B0022,transparent 70%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:"-80px", left:"-80px", width:"320px", height:"320px", borderRadius:"50%", background:"radial-gradient(circle,#7C3AED18,transparent 70%)", pointerEvents:"none" }} />
+
+        <div ref={heroRef} style={{ maxWidth:"1160px", margin:"0 auto", padding:"60px 20px", width:"100%" }}>
+          <div className="hero-wrap">
+            {/* Text col */}
+            <div>
+              <div style={{ display:"inline-flex", alignItems:"center", gap:"8px", background:"#fff", border:"2px solid #FF6B0044", padding:"7px 18px", borderRadius:"50px", marginBottom:"20px", boxShadow:"0 4px 16px #FF6B0018", opacity: heroVisible?1:0, transform: heroVisible?"translateY(0)":"translateY(20px)", transition:"all .7s ease .1s" }}>
+                <span style={{ width:"8px", height:"8px", background:"#FF6B00", borderRadius:"50%", animation:"pulseDot 1.6s ease infinite" }} />
+                <span style={{ fontSize:".76rem", color:"#FF6B00", fontWeight:800, letterSpacing:".1em", textTransform:"uppercase" }}>Print · Create · Deliver</span>
+              </div>
+
+              <h1 style={{ fontSize:"clamp(2.5rem,6vw,4.4rem)", fontWeight:900, lineHeight:1.06, letterSpacing:"-.03em", marginBottom:"18px", opacity: heroVisible?1:0, transform: heroVisible?"translateY(0)":"translateY(30px)", transition:"all .7s ease .2s" }}>
+                Your Vision,{" "}
+                <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Printed</span>
+                {" "}Perfectly.
+              </h1>
+
+              <p style={{ fontSize:"1rem", color:"#555", lineHeight:1.8, maxWidth:"460px", marginBottom:"28px", opacity: heroVisible?1:0, transform: heroVisible?"translateY(0)":"translateY(30px)", transition:"all .7s ease .32s" }}>
+                From business cards to festival banners, custom apparel to personalised gifts — VeerCraft delivers premium print solutions with passion and precision.
+              </p>
+
+              <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", opacity: heroVisible?1:0, transition:"all .7s ease .44s" }}>
+                <a href="#services"><button className="btn-grad">Explore Services ↓</button></a>
+                <a href="#contact"><button className="btn-white">Free Quote</button></a>
+              </div>
+
+              <div style={{ display:"flex", gap:"28px", marginTop:"36px", flexWrap:"wrap", opacity: heroVisible?1:0, transition:"all .7s ease .55s" }}>
+                {[["10K+","Orders"],["500+","Clients"],["48hr","Delivery"]].map(([v,l],i)=>(
+                  <div key={i}>
+                    <div style={{ fontWeight:900, fontSize:"1.6rem", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>{v}</div>
+                    <div style={{ fontSize:".75rem", color:"#888", fontWeight:700, textTransform:"uppercase", letterSpacing:".07em" }}>{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Visual col */}
+            <div className="hero-visual" style={{ opacity: heroVisible?1:0, transform: heroVisible?"translateX(0)":"translateX(40px)", transition:"all .9s ease .3s", position:"relative" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }}>
+                {[
+                  { icon:"🪪", label:"Business Cards", color:"#FF6B00", bg:"#FFF3EB" },
+                  { icon:"👕", label:"Custom Apparel",  color:"#E91E8C", bg:"#FFF0F7" },
+                  { icon:"🎁", label:"Gift Items",      color:"#7C3AED", bg:"#F5F0FF" },
+                  { icon:"🎉", label:"Event Printing",  color:"#059669", bg:"#EDFAF5" },
+                ].map((item,i) => (
+                  <div key={i} style={{ background:item.bg, border:`2px solid ${item.color}33`, borderRadius:"18px", padding:"26px 16px", textAlign:"center", animation:`float ${3+i*.6}s ease-in-out infinite`, animationDelay:`${i*.3}s`, boxShadow:`0 6px 24px ${item.color}22` }}>
+                    <div style={{ fontSize:"2.2rem", marginBottom:"8px" }}>{item.icon}</div>
+                    <div style={{ fontWeight:800, fontSize:".87rem", color:item.color }}>{item.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ position:"absolute", bottom:"-14px", right:"-10px", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", color:"#fff", borderRadius:"50%", width:"84px", height:"84px", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", boxShadow:"0 8px 28px #FF6B0066" }}>
+                <span style={{ fontWeight:900, fontSize:"1.4rem", lineHeight:1 }}>48</span>
+                <span style={{ fontSize:".56rem", fontWeight:700, letterSpacing:".1em", textTransform:"uppercase" }}>hr delivery</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ MARQUEE ═══ */}
+      <div style={{ background:"linear-gradient(90deg,#1A1A2E,#2D1B69)", padding:"13px 0", overflow:"hidden" }}>
+        <div className="marquee-outer">
+          <div className="marquee-track">
+            {[...Array(3)].map((_,r) =>
+              marqueeItems.map((item,i) => (
+                <span key={`${r}-${i}`} style={{ display:"inline-flex", alignItems:"center", gap:"14px", padding:"0 22px", color:"#fff", fontSize:".78rem", fontWeight:700, letterSpacing:".1em", textTransform:"uppercase", whiteSpace:"nowrap" }}>
+                  {item}
+                  <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", fontSize:"1rem" }}>✦</span>
+                </span>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ STATS ═══ */}
+      <section ref={statsRef} style={{ background:"#fff", padding:"60px 20px" }}>
+        <div className="stats-wrap" style={{ maxWidth:"960px", margin:"0 auto" }}>
+          {stats.map((s,i) => (
+            <div key={i} style={{ textAlign:"center", padding:"28px 16px", borderRadius:"20px", background:"#F8F9FF", border:"2px solid #FF6B0015", opacity: statsVisible?1:0, transform: statsVisible?"translateY(0)":"translateY(28px)", transition:`all .6s ease ${i*.1}s`, boxShadow:"0 2px 12px rgba(0,0,0,0.04)", cursor:"default" }}>
+              <div style={{ fontSize:"1.8rem", marginBottom:"8px" }}>{s.icon}</div>
+              <div style={{ fontWeight:900, fontSize:"2.1rem", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", lineHeight:1 }}>{s.value}</div>
+              <div style={{ fontSize:".76rem", color:"#888", fontWeight:700, textTransform:"uppercase", letterSpacing:".07em", marginTop:"6px" }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ SERVICES ═══ */}
+      <section id="services" style={{ padding:"80px 20px", background:"#F8F9FF" }}>
+        <div style={{ maxWidth:"1160px", margin:"0 auto" }}>
+          <div style={{ textAlign:"center", marginBottom:"48px" }}>
+            <div className="pill">What We Offer</div>
+            <h2 style={{ fontWeight:900, fontSize:"clamp(1.8rem,4vw,2.9rem)", lineHeight:1.1, letterSpacing:"-.02em" }}>
+              Our <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Print Categories</span>
+            </h2>
+          </div>
+          <div className="cat-grid">
+            {categories.map((cat,i) => <CatCard key={cat.id} cat={cat} index={i} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ WHY US ═══ */}
+      <section id="about" ref={whyRef} style={{ padding:"80px 20px", background:"linear-gradient(135deg,#1A1A2E 0%,#2D1B69 100%)", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", top:"-40px", right:"-40px", width:"260px", height:"260px", borderRadius:"50%", background:"radial-gradient(circle,#FF6B0030,transparent 70%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:"-40px", left:"-40px", width:"200px", height:"200px", borderRadius:"50%", background:"radial-gradient(circle,#E91E8C20,transparent 70%)", pointerEvents:"none" }} />
+
+        <div className="why-wrap" style={{ maxWidth:"1100px", margin:"0 auto" }}>
+          <div style={{ opacity: whyVisible?1:0, transform: whyVisible?"translateX(0)":"translateX(-30px)", transition:"all .8s ease" }}>
+            <div className="pill">Why Choose Us</div>
+            <h2 style={{ fontWeight:900, fontSize:"clamp(1.9rem,3.5vw,2.9rem)", lineHeight:1.1, color:"#fff", marginBottom:"18px" }}>
+              Crafted with{" "}
+              <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Passion &</span>
+              {" "}Precision
+            </h2>
+            <p style={{ color:"#aaa", lineHeight:1.8, fontSize:".95rem", marginBottom:"30px" }}>
+              At VeerCraft, we blend traditional craftsmanship with modern print technology. Every order is quality-checked, colour-matched, and delivered on time — guaranteed.
+            </p>
+            <a href="#contact"><button className="btn-grad">Start Your Order →</button></a>
+          </div>
+
+          <div style={{ display:"flex", flexDirection:"column", gap:"14px", opacity: whyVisible?1:0, transform: whyVisible?"translateX(0)":"translateX(30px)", transition:"all .8s ease .2s" }}>
+            {features.map((f,i) => (
+              <div key={i} style={{ display:"flex", gap:"14px", padding:"18px", borderRadius:"16px", background:"rgba(255,255,255,0.07)", border:"1.5px solid rgba(255,255,255,0.1)", backdropFilter:"blur(8px)" }}>
+                <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:`${f.color}30`, border:`1.5px solid ${f.color}55`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.3rem", flexShrink:0 }}>{f.icon}</div>
+                <div>
+                  <div style={{ fontWeight:800, color:"#fff", marginBottom:"3px", fontSize:".97rem" }}>{f.title}</div>
+                  <div style={{ color:"#aaa", fontSize:".83rem", lineHeight:1.65 }}>{f.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ TESTIMONIALS ═══ */}
+      <section style={{ padding:"80px 20px", background:"#fff" }}>
+        <div style={{ maxWidth:"660px", margin:"0 auto", textAlign:"center" }}>
+          <div className="pill">Testimonials</div>
+          <h2 style={{ fontWeight:900, fontSize:"clamp(1.7rem,3.5vw,2.5rem)", letterSpacing:"-.02em", marginBottom:"40px" }}>
+            What Our <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Clients Say</span>
+          </h2>
+
+          <div style={{ position:"relative", minHeight:"220px" }}>
+            {testimonials.map((t,i) => (
+              <div key={i} style={{ position: i===activeT?"relative":"absolute", top:0, left:0, right:0, opacity: i===activeT?1:0, animation: i===activeT?"fadeUp .5s ease":"none", transition:"opacity .4s", pointerEvents: i===activeT?"auto":"none" }}>
+                <div style={{ background:`linear-gradient(135deg,${t.color}10,${t.color}06)`, border:`2px solid ${t.color}33`, borderRadius:"20px", padding:"28px 24px", marginBottom:"20px" }}>
+                  <div style={{ fontSize:"2.4rem", lineHeight:1, marginBottom:"10px", color:t.color }}>"</div>
+                  <p style={{ fontSize:"1rem", color:"#333", lineHeight:1.75, fontStyle:"italic" }}>{t.text}</p>
+                </div>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"12px" }}>
+                  <div style={{ width:"44px", height:"44px", borderRadius:"50%", background:`linear-gradient(135deg,${t.color},${t.color}88)`, display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontWeight:800, fontSize:".85rem", flexShrink:0 }}>{t.avatar}</div>
+                  <div style={{ textAlign:"left" }}>
+                    <div style={{ fontWeight:800, color:"#1A1A2E" }}>{t.name}</div>
+                    <div style={{ fontSize:".77rem", color:"#888", fontWeight:600 }}>{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display:"flex", justifyContent:"center", gap:"8px", marginTop:"24px" }}>
+            {testimonials.map((_,i) => (
+              <button key={i} onClick={() => setActiveT(i)} style={{ width: i===activeT?"28px":"8px", height:"8px", borderRadius:"4px", background: i===activeT?"#FF6B00":"#FF6B0035", border:"none", cursor:"pointer", transition:"all .3s" }} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CONTACT ═══ */}
+      <section id="contact" style={{ padding:"80px 20px", background:"#F8F9FF" }}>
+        <div style={{ maxWidth:"620px", margin:"0 auto" }}>
+          <div style={{ textAlign:"center", marginBottom:"40px" }}>
+            <div className="pill">Get In Touch</div>
+            <h2 style={{ fontWeight:900, fontSize:"clamp(1.8rem,4vw,2.7rem)", letterSpacing:"-.02em", marginBottom:"10px" }}>
+              Request a <span style={{ background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Free Quote</span>
+            </h2>
+            <p style={{ color:"#777", fontSize:".95rem" }}>Fill in the form and we'll reach out within a few hours.</p>
+          </div>
+
+          {submitted ? (
+            <div style={{ textAlign:"center", padding:"52px 28px", borderRadius:"24px", background:"linear-gradient(135deg,#FFF3EB,#FFF0F7)", border:"2px solid #FF6B0033" }}>
+              <div style={{ fontSize:"3rem", marginBottom:"14px" }}>🎉</div>
+              <h3 style={{ fontWeight:900, fontSize:"1.8rem", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", marginBottom:"10px" }}>Thank You!</h3>
+              <p style={{ color:"#555", lineHeight:1.7 }}>We've received your request and will reach out via WhatsApp or phone shortly.</p>
+            </div>
+          ) : (
+            <form onSubmit={e => { e.preventDefault(); setSubmitted(true); }} style={{ display:"flex", flexDirection:"column", gap:"14px" }}>
+              {[
+                { label:"Your Name",         key:"name",  type:"text", ph:"e.g. Ravi Sharma"   },
+                { label:"Phone / WhatsApp",  key:"phone", type:"tel",  ph:"+91 98765 43210"    },
+              ].map(f => (
+                <div key={f.key}>
+                  <label style={{ display:"block", fontSize:".77rem", fontWeight:800, color:"#333", marginBottom:"6px", textTransform:"uppercase", letterSpacing:".06em" }}>{f.label}</label>
+                  <input required type={f.type} placeholder={f.ph} value={formData[f.key]} onChange={e => setFormData({...formData,[f.key]:e.target.value})}
+                    style={{ width:"100%", padding:"13px 16px", border:"2px solid #E8E8F0", borderRadius:"12px", fontSize:".95rem", background:"#fff", color:"#1A1A2E", transition:"border-color .2s, box-shadow .2s" }} />
+                </div>
+              ))}
+              <div>
+                <label style={{ display:"block", fontSize:".77rem", fontWeight:800, color:"#333", marginBottom:"6px", textTransform:"uppercase", letterSpacing:".06em" }}>Service Needed</label>
+                <select required value={formData.service} onChange={e => setFormData({...formData,service:e.target.value})}
+                  style={{ width:"100%", padding:"13px 16px", border:"2px solid #E8E8F0", borderRadius:"12px", fontSize:".95rem", background:"#fff", color: formData.service?"#1A1A2E":"#aaa", appearance:"none" }}>
+                  <option value="" disabled>Select a category…</option>
+                  {categories.map(c => <option key={c.id} value={c.title}>{c.icon} {c.title}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ display:"block", fontSize:".77rem", fontWeight:800, color:"#333", marginBottom:"6px", textTransform:"uppercase", letterSpacing:".06em" }}>Your Requirements</label>
+                <textarea required rows={4} placeholder="Quantity, size, design details…" value={formData.message} onChange={e => setFormData({...formData,message:e.target.value})}
+                  style={{ width:"100%", padding:"13px 16px", border:"2px solid #E8E8F0", borderRadius:"12px", fontSize:".95rem", background:"#fff", color:"#1A1A2E", resize:"vertical", transition:"border-color .2s, box-shadow .2s" }} />
+              </div>
+              <button type="submit" className="btn-grad" style={{ marginTop:"6px", fontSize:"1rem", padding:"16px", width:"100%", borderRadius:"14px" }}>
+                Send My Request →
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+
+      {/* ═══ CTA BANNER ═══ */}
+      <section style={{ padding:"72px 20px", background:"linear-gradient(135deg,#FF6B00 0%,#E91E8C 50%,#7C3AED 100%)", backgroundSize:"200% 200%", animation:"gradShift 6s ease infinite", textAlign:"center", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", top:"-60px", left:"-60px", width:"220px", height:"220px", borderRadius:"50%", background:"rgba(255,255,255,0.08)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:"-60px", right:"-60px", width:"200px", height:"200px", borderRadius:"50%", background:"rgba(255,255,255,0.08)", pointerEvents:"none" }} />
+        <div style={{ position:"relative", zIndex:1 }}>
+          <h2 style={{ fontWeight:900, fontSize:"clamp(1.7rem,4vw,2.7rem)", color:"#fff", marginBottom:"12px", letterSpacing:"-.02em" }}>
+            Ready to Print Something Amazing? 🚀
+          </h2>
+          <p style={{ color:"rgba(255,255,255,.88)", fontSize:"1rem", marginBottom:"28px" }}>
+            Message us on WhatsApp — get your order started in minutes.
+          </p>
+          <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer">
+            <button style={{ background:"#fff", color:"#FF6B00", border:"none", padding:"16px 38px", fontFamily:"'Nunito',sans-serif", fontSize:"1rem", fontWeight:900, letterSpacing:".04em", cursor:"pointer", borderRadius:"50px", boxShadow:"0 6px 24px rgba(0,0,0,0.2)", transition:"all .25s" }}
+              onMouseEnter={e => { e.target.style.transform="translateY(-3px) scale(1.04)"; }}
+              onMouseLeave={e => { e.target.style.transform=""; }}>
+              💬 Chat on WhatsApp
+            </button>
+          </a>
+        </div>
+      </section>
+
+      {/* ═══ FOOTER ═══ */}
+      <footer style={{ background:"#1A1A2E", color:"#aaa", padding:"52px 20px 28px" }}>
+        <div className="footer-wrap" style={{ maxWidth:"1100px", margin:"0 auto", marginBottom:"32px" }}>
+          <div>
+            <div style={{ display:"flex", alignItems:"center", gap:"9px", marginBottom:"14px" }}>
+              <div style={{ width:"34px", height:"34px", borderRadius:"10px", background:"linear-gradient(135deg,#FF6B00,#E91E8C)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                <span style={{ color:"#fff", fontWeight:900, fontSize:"1rem" }}>V</span>
+              </div>
+              <span style={{ fontWeight:900, fontSize:"1.3rem", color:"#fff" }}>
+                Veer<span style={{ background:"linear-gradient(90deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Craft</span>
+              </span>
+            </div>
+            <p style={{ fontSize:".87rem", lineHeight:1.75, maxWidth:"300px" }}>Premium print-on-demand solutions for businesses, events, and individuals. Delivered with care and colour.</p>
+          </div>
+          <div>
+            <div style={{ color:"#fff", fontWeight:800, marginBottom:"14px", fontSize:".95rem" }}>Services</div>
+            {["Business Printing","Apparel","Gift Items","Event Printing","Branding"].map(s => (
+              <div key={s} style={{ fontSize:".85rem", marginBottom:"8px", cursor:"pointer", transition:"color .2s" }}
+                onMouseEnter={e => e.target.style.color="#FF6B00"}
+                onMouseLeave={e => e.target.style.color="#aaa"}>{s}</div>
+            ))}
+          </div>
+          <div>
+            <div style={{ color:"#fff", fontWeight:800, marginBottom:"14px", fontSize:".95rem" }}>Contact</div>
+            {["📞 +91 98765 43210","💬 WhatsApp Order","📧 hello@veercraft.in","📍 Your City, India"].map(c => (
+              <div key={c} style={{ fontSize:".85rem", marginBottom:"10px" }}>{c}</div>
+            ))}
+          </div>
+        </div>
+        <div style={{ borderTop:"1px solid #ffffff12", paddingTop:"20px", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"8px" }}>
+          <span style={{ fontSize:".8rem" }}>© 2025 VeerCraft. All rights reserved.</span>
+          <span style={{ fontSize:".8rem", background:"linear-gradient(90deg,#FF6B00,#E91E8C)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", fontWeight:700 }}>Made with ♥ for quality prints</span>
+        </div>
+      </footer>
+    </div>
+  );
+}
