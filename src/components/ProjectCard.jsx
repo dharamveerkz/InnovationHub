@@ -12,7 +12,7 @@ export default function ProjectCard({
       <div className="card-inner">
         <div className="card-top">
       {/*  <span className="card-num">{id}</span> */}
-          <span className="card-arrow">↗</span>
+     {/*  <span className="card-arrow">↗</span>  */}
         </div>
         <div className="card-name">{name}<span className="highlight">{highlight}</span></div>
         <p className="card-desc">{description}</p>
