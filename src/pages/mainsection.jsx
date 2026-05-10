@@ -12,7 +12,7 @@ import VeerCraft from '../ideas/VeerCraft';
 
 
 const PROJECT_COUNT = 7; 
-const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart', 'Crafix', 'FileForge', 'VeerCraft'];
+const PROTOTYPE_NAMES = ['HealthScan AI', 'ArtBridge', 'SchoolERP', 'KalaaCart', 'Crafix', 'FileForge', 'VeerCraft' ];
 
 export default function MainSection() {
   return (
