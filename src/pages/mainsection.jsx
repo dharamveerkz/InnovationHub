@@ -87,13 +87,13 @@ export default function MainSection() {
         </div>
 
         <div className="projects">
-          <HealthScanAI />
+          <KalaaCart />
           <ArtBridge />
           <SchoolERP />
-          <KalaaCart />
+          <HealthScanAI />
+          <VeerCraft />
           <Crafix />
           <FileForge />
-          <VeerCraft />
           
 
 
